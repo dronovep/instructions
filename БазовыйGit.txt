@@ -1,0 +1,4 @@
+#Вводим данные пользователя
+git config --global user.name "Eugene Dronov"
+git config --global user.email dronov-ep@yandex.ru
+

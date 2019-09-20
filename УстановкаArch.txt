@@ -1,0 +1,179 @@
+#!/bin/bash
+
+#Загрузка русских букв в консоль
+loadkeys ru
+
+#Выбор нужного шрифта в консоль. Выбор раскладки происходит на Ctrl+Shift
+setfont cyr-sun16
+
+#Установка статического ip адреса  на интерфейс ens3
+ip address add 62.173.145.100/24 broadcast + dev ens3
+
+#Установка интернета по dhcp с кабелем напрямую
+dhcpcd
+
+#Установка базового маршрута - шлюза по умолчанию
+ip route add default via 62.173.145.1 dev ens3
+
+#Настройка dns путем правки файла /etc/resolv.conf
+#nameserver 185.31.162.29
+#nameserver 62.173.149.230
+#nameserver 8.8.8.8
+
+#Синхронизация системных часов
+timedatectl set-ntp true
+
+#установка часового пояса
+ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
+
+
+#Настраиваем разметку диска с помощью утилиты cfdisk
+/dev/sda1 - bootable 200M Linux
+/dev/sda2 - основной раздел наибольшего раздела Linux
+/dev/sda3 - 5G Linux swap/ Solaris
+
+#Форматируем разделы диска
+mkfs.ext4 /dev/sda1
+mkfs.ext4 /dev/sda2
+mkswap /dev/sda3
+swapon /dev/sda3
+
+#Монтируем необходимые разделы
+mount /dev/sda2 /mnt
+mkdir /mnt/boot
+mount /dev/sda1 /mnt/boot
+
+
+#Редактируем /etc/pacman.d/mirrorlist и поднимаем сервера яндекса на самое верхнее положение в списке
+#Редактируем /etc/pacman.conf   и убираем комментирование со сторики multilib для включения 32 битных пакетов
+
+#Генерируем локали , убираем коммент с ru_RU-UTF8 в файле /etc/locale.gen
+locale-gen
+localectl set-locale ru_RU.UTF-8
+#Устанавливаем содержимое файла /etc/locale.conf
+LANG=ru_RU.UTF-8
+LANGUAGE=en_US:ru_RU
+LC_TIME=ru_RU.UTF-8
+LC_COLLATE=C
+#Устанавливаем содержимое файла /etc/vconsole.conf
+KEYMAP=us
+KEYMAP_TOGGLE=ru
+FONT=cyr-sun16
+
+
+#Устанавливаем базовые пакеты в новую смонтированную систему
+pacstrap /mnt base base-devel emacs git openssh netctl dialog wpa_supplicant grub
+
+#Генерируем файл настроек автомонтирования дисков при загрузке системы
+genfstab -U /mnt >> /mnt/etc/fstab
+
+
+
+
+
+
+
+
+
+
+#Переходим под root в новой установленной системе с помощью arch-chroot
+arch-chroot /mnt
+
+#Синхронизация системных часов
+timedatectl set-ntp true
+
+#установка часового пояса
+ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
+
+#Генерация /etc/adjtime
+hwclock --systohc
+
+#Проверить верность настроенного времени можно запустив timedatectl show
+
+#Генерируем локали , убираем коммент с ru_RU-UTF8 в файле /etc/locale.gen
+locale-gen
+#Устанавливаем содержимое файла /etc/locale.conf
+LANG=ru_RU.UTF-8
+LANGUAGE=en_US:ru_RU
+LC_TIME=ru_RU.UTF-8
+LC_COLLATE=C
+#Устанавливаем содержимое файла /etc/vconsole.conf
+KEYMAP=us
+KEYMAP_TOGGLE=ru
+FONT=cyr-sun16
+
+
+#Создаем имя хоста - создаем файл /etc/hostname, а в нем указываем имя хоста
+development
+#Добавляем следующее в файл /etc/hosts
+127.0.0.1	localhost
+::1		localhost
+127.0.1.1	development.localdomain	development
+
+#Создание initramfs с помощью команды
+mkinitcpio -p linux
+
+
+#Задаем пароль пользователя root командой
+passwd
+пароль
+повторить пароль
+
+#Генерируем конфиг загрузчика grub и устанавливаем загрузчик на жесткий диск
+mkdir /boot/grub
+grub-mkconfig -o /boot/grub/grub.cfg
+
+#Устанавливаем загрузчик в случае классического bios 
+grub-install /dev/sda
+#В случае UEFI
+grub-install --target=x86_64-efi --efi-directory=/boot --removable
+
+
+
+
+
+
+
+#Перезагружаемся командой reboot или еще какими средствами, отключая установочный образ
+#Авторизуемся под пользвателем root
+
+#Снова поднимаем интернет
+#Установка статического ip адреса  на интерфейс ens3
+ip address add 62.173.145.100/24 broadcast + dev ens3
+
+#Установка интернета по dhcp с кабелем напрямую
+dhcpcd
+
+#Установка базового маршрута - шлюза по умолчанию
+ip route add default via 62.173.145.1 dev ens3
+
+#Настройка dns путем правки файла /etc/resolv.conf
+#nameserver 185.31.162.29
+#nameserver 62.173.149.230
+#nameserver 8.8.8.8
+
+
+#Добавляем пользователя с sudo, под которым в итоге будем все время работать
+groupadd sudo
+useradd -m -g users -G audio,games,lp,optical,power,scanner,storage,video,wheel,sudo -s /bin/bash nerevarino
+#назначаем пользователю пароль
+passwd nerevarino
+пароль
+повторить пароль
+#разрешаем sudo в системе
+chmod 755 /etc/sudoers
+#Редактируем файл /etc/sudoers/  - раскомментируем строчку с %sudo ALL=(ALL) ALL
+
+#Переходим под нашего основного пользователя
+su nerevarino
+
+#Ставим дополнительные шрифты в систему
+sudo pacman -S ttf-liberation ttf-dejavu opendesktop-fonts ttf-bitstream-vera ttf-arphic-ukai ttf-arphic-uming ttf-hanazono
+
+
+OPTIONAL
+#Настраиваем ssh сервер
+
+
+#Настраиваем терминал xfce: шрифт Monospace Bold 11, разрешить полужирный, цвет #A39FCA
+
