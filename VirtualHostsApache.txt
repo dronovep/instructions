@@ -1,0 +1,18 @@
+В файле /etc/httpd/conf/httpd.conf раскомментировать строку:
+  Include conf/extra/httpd-vhosts.conf
+
+Создаем директорию
+mkdir /etc/httpd/conf/vhosts
+
+Создаем в ней файл ${домен сайта}
+
+
+Редактируем этот файл подставляя конкретные значения в шаблон vhost_example.conf
+
+Файл - заглушка на ошибки 403 и 404 называется blank.html, лежит рядом в этой инструкции
+
+В файл /etc/httpd/conf/httpd.conf в конец добавить:
+   Include /etc/httpd/conf/vhosts/${домен сайта}
+
+
+  

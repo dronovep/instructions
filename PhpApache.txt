@@ -1,0 +1,15 @@
+Открываем файл /etc/httpd/conf/httpd.conf
+
+Устанавливаем пакет php-apache:   sudo pacman -S php-apache
+
+Комментируем строку LoadModule mpm_event_module modules/mod_mpm_event.so
+Раскомментируем строку LoadModule mpm_prefork_module modules/mod_mpm_prefork.so
+
+В конце списка LoadModule добавляем:
+  LoadModule php7_module modules/libphp7.so
+  AddHandler php7-script .php
+
+В конце списка Include добавляем:
+  Include conf/extra/php7_module.conf
+
+Перезапускаем httpd:  sudo systemctl restart httpd

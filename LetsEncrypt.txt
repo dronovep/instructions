@@ -1,0 +1,12 @@
+Для добавления SSL сертификата LetsEncrypt на сайт будем использовать утилиту certbot
+
+Установка certbot и его модуля для Apache:
+  sudo pacman -S certbot certbot-apache
+
+Установка cron для автоматического перевыпуска сертификатов:
+  sudo pacman -S cronie
+
+Включение автоматического перевыпуска командой
+  echo "0 0,12 * * * root python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew" | sudo tee -a /etc/crontab > /dev/null
+
+
