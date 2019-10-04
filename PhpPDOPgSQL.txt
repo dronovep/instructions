@@ -1,0 +1,2 @@
+В файле /etc/php/php.ini нужно раскомменитировать следующую строку:
+  extension=pdo_pgsql	       
