@@ -1,0 +1,34 @@
+На примере MariaDB и ArchLinux
+
+Инициализируем кластер базы данных:
+   mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+
+Запускаем базу данных
+  sudo systemctl start mariadb
+
+настраиваем безопасность скриптом:
+  sudo mysql_secure_installation
+    1)выставляем root пароль
+    2)отказываемся от unix_socket аутентификации
+    3)не меняем root пароль
+    4)Удаляем анонимных пользователей
+    5)Отключить удаленный доступ под root
+    6)Удаляем тестовую базу данных
+    7)Перезагрузить привилегии
+
+коннектимся к БД как суперпользователь
+  sudo mysql -u root -p
+
+Создаем базу данных {$dbname}   (например это будет база для сайта):
+  create database `{$dbname}`;
+
+Добавляем пользователя {$username} для этой базы:
+  CREATE USER '{$username}'@'localhost' IDENTIFIED BY '{$password}';	
+  GRANT ALL PRIVILEGES ON {$dbname}.* TO '{$username}'@'localhost';
+  FLUSH PRIVILEGES;
+
+Загружаем базу из дампа:
+   mysql -u evgeniy -pZk.,k.Lfie91 modxplanetahost < modxplanetahost.sql
+   
+В файле /etc/php/php.ini раскомментировать строчку:
+  extension=pdo_mysql
