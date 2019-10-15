@@ -1,0 +1,2 @@
+#Добавить новую группу в систему
+sudo groupadd {$groupname}

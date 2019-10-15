@@ -1,0 +1,4 @@
+#Добавить нового пользователя в систему
+
+sudo useradd -m -G {$comma-separated-groups} -s {$login_shell} {$username}
+
