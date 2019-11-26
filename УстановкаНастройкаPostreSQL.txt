@@ -11,7 +11,7 @@
   rm -rf ./*
 
 От пользователя postgres редактируем файл /var/lib/postgres/data/postgresql.conf :
-  убираем комментирование с listen_addresses = 'localhost'
+  убираем комментирование с listen_addresses = 'localhost' (вместо localhost пишем 0.0.0.0)
   убираем комментирование с port = ${pgport}
 
 Запускаем сервер PostgreSQL командой:
@@ -19,12 +19,12 @@
 
 Создаем стандартного пользователя с именем ${pguser}:
   createuser ${pguser} -p ${pgport} -P 
-
+  
 Создаем базу данных ${dbname} для пользователя ${pguser}:
   createdb ${dbname} -p ${pgport} -E UTF8 -O ${pguser}
 
 Подключиться к базе из консоли можно командой:
   psql ${dbname} -U ${pguser} -p ${pgport}
-  
+       
   
   
