@@ -1,0 +1,6 @@
+Например примонтировать удаленную папку luchki_ed в локальную папку ~/luchki/   :
+	 sshfs luchki:/home/ed/luchki_ed/  ~/luchki
+
+Размонтировать эту папку:
+	 fusermount3 -u ~/luchki
+	 
