@@ -2,3 +2,4 @@
 
 sudo useradd -m -G {$comma-separated-groups} -s {$login_shell} {$username}
 
+useradd -m -G adm,tty,disk,lp,mem,wheel,cdrom,mail,man,games,video,ftp,lock,audio,users,sshd,webadmin -s /bin/bash nerevarino
