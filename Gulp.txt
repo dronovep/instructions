@@ -1,0 +1,9 @@
+Устанавливаем глобально gulp в систему:
+    sudo npm install -g gulp-cli
+
+В корневой папке проекта инитим пакет и ставим нужное:
+    npm init
+    npm install --save-dev gulp
+    npm install --save-dev typescript
+    npm install --save-dev gulp-typescript
+
