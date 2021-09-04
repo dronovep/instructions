@@ -1,0 +1,6 @@
+-- Удаление самой программы
+        sudo dnf remove docker-ce docker-ce-cli containerd.io
+
+-- Удаление данных
+        sudo rm -rf /var/lib/docker
+        sudo rm -rf /var/lib/containerd
