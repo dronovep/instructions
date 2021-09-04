@@ -10,3 +10,25 @@
                                                          указанием версии
 
     # browse    ("composer browse [-s] | [-H] packagename") - показать ссылку (-s) или открыть в браузере (-H) домашнюю страницу указанного пакета
+    # cc        ("composer cc") - удаляет все закешированные пакеты из кеш-директории composer-а (например из /home/{$username}/.cache/composer*)
+                команда имеет алиасы clear-cache и clearcache
+    # check-platform-reqs  ("composer check-platform-reqs") - проверяет, то текущая версия PHP и его необходимых расширений
+                            отвечает требованиям установленных пакетов. Пример вывода команды:
+                                ext-dom        20031129    success
+                                ext-filter     7.4.16      success
+                                ext-json       7.4.16      success
+                                ext-libxml     7.4.16      success
+                                ext-mbstring   7.4.16      success
+                                ext-phar       7.4.16      success
+                                ext-tokenizer  7.4.16      success
+                                ext-xml        7.4.16      success
+                                ext-xmlwriter  7.4.16      success
+                                php            7.4.16      success
+
+    # config ("composer config")  команда для редактирования настроек и репозиториев composer-а.
+                                  Настройка может происходить как локально (пишется в composer.json проекта)
+                                  Так и глобально (пишется в глобальный файл config.json)
+                                  Это сложная команда, действие во многом зависит от операндов. Также нужно знать
+                                  конкретные конфигурационные опции
+
+    # create-project ("composer create-project [packagename]")
